@@ -5,9 +5,6 @@
   <title>¿Quieres ser mi San Valentín?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    /* ===================
-       ESTILOS GENERALES
-       =================== */
     body {
       margin: 0;
       padding: 0;
@@ -16,6 +13,7 @@
       text-align: center;
       overflow-x: hidden; /* Para evitar scroll horizontal con los corazones */
     }
+
     h1 {
       margin-top: 1rem;
       color: #d45a6d;
@@ -24,38 +22,21 @@
       color: #444;
       font-size: 1.1rem;
     }
-    /* Ajustamos el botón para que quede más abajo */
-    .final-button {
-      background-color: #d45a6d;
-      color: #fff;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 2rem; /* Separa el botón de las cartas */
-      margin-bottom: 3rem;
-    }
-    .final-button:hover {
-      background-color: #c3495d;
-    }
 
-    /* ===================
-       CONTENEDOR DE CARTAS
-       =================== */
-    /* Por defecto en pantallas grandes: flex fila + wrap */
+    /* USAMOS GRID */
     .card-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center; /* Centra las cartas en la fila */
-      gap: 1rem;              /* Espacio horizontal y vertical entre cartas */
-      margin: 1rem 0;
+      display: grid;
+      /* Cada columna tendrá mínimo 150px y, si cabe más, se expandirá */
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      justify-items: center; /* Centra las cartas en cada "columna" */
+      margin: 1rem;
     }
 
-    /* Cartas: 200x200 en pantallas grandes */
     .card {
+      /* Quita la altura fija y usa aspect-ratio para que sea cuadrado */
       width: 200px;
-      height: 200px;
+      aspect-ratio: 1/1;
       perspective: 1000px;
       cursor: pointer;
     }
@@ -89,7 +70,7 @@
       background: url("Corazon.jpg") no-repeat center/cover;
       color: rgba(144, 64, 255, 0.8); /* Texto semitransparente */
     }
-    /* Parte trasera: transform común para todas */
+    /* Parte trasera */
     .card-back {
       transform: rotateY(180deg);
       position: relative;
@@ -100,7 +81,7 @@
     .card-back-3 { background: url("Carta3.jpg") no-repeat center/cover; }
     .card-back-4 { background: url("Carta4.jpg") no-repeat center/cover; }
 
-    /* Texto de la parte trasera que aparece suavemente */
+    /* Texto de la parte trasera */
     .card-back-text {
       position: absolute;
       top: 10px;
@@ -121,26 +102,35 @@
       transform: translateY(0);
     }
 
-    /* ===================
-       EFECTO CORAZONES
-       =================== */
-    .heart {
-      position: fixed; /* Para "flotar" sobre la pantalla */
-      top: -10%;       /* Inician un poco arriba del viewport */
-      font-size: 2rem; /* Tamaño del corazón */
-      color: #ff6b81;  /* Color del corazón (puedes cambiarlo) */
-      user-select: none;
-      cursor: pointer; /* Para poder hacer clic en ellos */
-      animation: fall linear forwards;
+    .final-button {
+      background-color: #d45a6d;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 2rem; 
+      margin-bottom: 3rem;
     }
-    /* Animación de caída de corazones */
-    @keyframes fall {
-      to {
-        transform: translateY(110vh); /* Baja más allá del viewport */
-      }
+    .final-button:hover {
+      background-color: #c3495d;
     }
 
-    /* Corazones pequeños que aparecen al explotar */
+    .heart {
+      position: fixed;
+      top: -10%;
+      font-size: 2rem;
+      color: #ff6b81;
+      user-select: none;
+      cursor: pointer;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+      }
+    }
     .tiny-heart {
       position: fixed;
       transform: translate(-50%, -50%);
@@ -149,7 +139,6 @@
       opacity: 1;
       animation: pop 1s ease-out forwards;
     }
-    /* Animación de explosión de los corazones pequeños */
     @keyframes pop {
       0% {
         opacity: 1;
@@ -161,16 +150,27 @@
       }
     }
 
-    /* ===================
-       PUGS BAILANDO
-       =================== */
+    /* RESPONSIVO */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.3rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      .card {
+        width: 150px; /* O incluso 40vw (si quieres que sea porcentual) */
+      }
+    }
+
+    /* PUGS BAILANDO */
     .dancing-pug-container {
       position: fixed;
       bottom: 10px;
-      left: 45%; /* Ajusta para ubicarlo al gusto */
+      left: 45%;
       transform: translateX(-50%);
-      width: 120px;      /* Ajusta el tamaño a tu gusto */
-      z-index: 9999;     /* Para que quede por encima de otros elementos */
+      width: 120px;
+      z-index: 9999;
       animation: bounce 2s infinite;
     }
     .dancing-pug-container img {
@@ -181,7 +181,7 @@
     .dancing-pug-container-2 {
       position: fixed;
       bottom: 10px;
-      left: 55%; /* Ajusta para ubicar el segundo pug */
+      left: 55%;
       transform: translateX(-50%);
       width: 120px;
       z-index: 9999;
@@ -200,31 +200,6 @@
         transform: translateX(-50%) translateY(-20px);
       }
     }
-
-    /* ===================
-       MEDIA QUERY: EN MÓVILES
-       =================== */
-    @media (max-width: 480px) {
-      /* Títulos y texto más pequeño */
-      h1 {
-        font-size: 1.3rem;
-      }
-      p {
-        font-size: 1rem;
-      }
-
-      /* En móviles, las cartas se ponen una debajo de otra con distancia */
-      .card-container {
-        flex-direction: column;   /* Apila las cartas verticalmente */
-        align-items: center;      /* Centra cada carta */
-        gap: 2rem;               /* Espacio vertical entre cartas */
-      }
-
-      .card {
-        width: 150px;            /* Ajusta el ancho de cada carta */
-        height: 150px;           /* Mantén altura en proporción */
-      }
-    }
   </style>
 </head>
 <body>
@@ -235,7 +210,6 @@
   <h1>Para ti, mi reinita hermosa Jesabeth Jessica Soca Huillcas</h1>
   <p>He preparado algo especial para este San Valentín. ¡Voltea las cartas!</p>
 
-  <!-- CONTENEDOR DE LAS CARTAS -->
   <div class="card-container">
     <!-- CARTA 1 -->
     <div class="card" onclick="flipCard(this)">
@@ -244,9 +218,7 @@
           Lo que eres para mí 
         </div>
         <div class="card-face card-back card-back-1">
-          <div class="card-back-text">
-            ¡Eres la persona más especial del mundo!
-          </div>
+          <div class="card-back-text">¡Eres la persona más especial del mundo!</div>
         </div>
       </div>
     </div>
@@ -255,12 +227,10 @@
     <div class="card" onclick="flipCard(this)">
       <div class="card-inner">
         <div class="card-face card-front">
-          Quisiera que sea eterno
+          Quisiera que sea eterno 
         </div>
         <div class="card-face card-back card-back-2">
-          <div class="card-back-text">
-            Me encanta verte sonreír cada día
-          </div>
+          <div class="card-back-text">Me encanta verte sonreír cada día</div>
         </div>
       </div>
     </div>
@@ -269,12 +239,10 @@
     <div class="card" onclick="flipCard(this)">
       <div class="card-inner">
         <div class="card-face card-front">
-          Recuérdalo siempre
+          Recuérdalo siempre 
         </div>
         <div class="card-face card-back card-back-3">
-          <div class="card-back-text">
-            Tu alegría ilumina mi vida
-          </div>
+          <div class="card-back-text">Tu alegría ilumina mi vida</div>
         </div>
       </div>
     </div>
@@ -283,62 +251,44 @@
     <div class="card" onclick="flipCard(this)">
       <div class="card-inner">
         <div class="card-face card-front">
-          Y espero que vengan muchos más
+          Y espero que vengan muchos más 
         </div>
         <div class="card-face card-back card-back-4">
-          <div class="card-back-text">
-            Cada momento contigo es maravilloso
-          </div>
+          <div class="card-back-text">Cada momento contigo es maravilloso</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- BOTÓN FINAL -->
   <button class="final-button" onclick="finalPrompt()">
-    Te quiero hacer una pregunta
+    Te quiero hacer una pregunta 
   </button>
 
-  <!-- PUGS BAILANDO -->
-  <div class="dancing-pug-container">
-    <img src="DancingPug.gif" alt="Pug bailando">
-  </div>
-  <div class="dancing-pug-container-2">
-    <img src="DancingPug.gif" alt="Pug bailando">
-  </div>
-
-  <!-- JAVASCRIPT -->
   <script>
     // Intentamos reproducir la música al cargar la página
     window.addEventListener("load", () => {
       const audio = document.getElementById("bgMusic");
       if (audio) {
         audio.play().catch(() => {
-          // Si falla (bloqueado por el navegador), esperamos el primer clic del usuario:
           document.body.addEventListener("click", playOnce);
         });
       }
     });
 
-    // Al primer clic del usuario, intentamos reproducir el audio
     function playOnce() {
       const audio = document.getElementById("bgMusic");
       if (audio) {
         audio.play().catch(() => {});
       }
-      // Quitamos este listener para que no se repita
       document.body.removeEventListener("click", playOnce);
     }
 
-    // Función para voltear la carta
     function flipCard(cardElement) {
       const cardInner = cardElement.querySelector(".card-inner");
       cardInner.classList.toggle("is-flipped");
     }
 
-    // Función que se ejecuta al hacer click en el botón final
     function finalPrompt() {
-      // Array con distintos mensajes para cuando presione "No"
       const messages = [
         "¿Estás segura de que no quieres ser mi San Valentín?",
         "¿De veritas no quieres? Yo te amo mucho ❤️",
@@ -346,88 +296,74 @@
         "Mi amor, no seas así, acepta porfi 🥺",
         "No me rendiré hasta que digas sí 😘"
       ];
-
-      let index = 0; // Para recorrer los mensajes
-      // Primero, pregunta principal:
+      let index = 0; 
       let respuesta = confirm("¿Quieres ser mi San Valentín?");
       
-      // Mientras la respuesta sea NO, sigue insistiendo
       while (!respuesta) {
         respuesta = confirm(messages[index % messages.length]);
         index++;
       }
-
-      // Si salió del bucle, es porque finalmente dijo "Sí"
       alert("¡Gracias, mi amor! Te amo mucho ❤️");
     }
 
-    // Generador de corazones grandes que caen
     function createFallingHeart() {
       const heart = document.createElement("div");
       heart.classList.add("heart");
-      heart.innerHTML = "&#10084;"; // Corazón grande
+      heart.innerHTML = "&#10084;"; 
 
-      // Posición X aleatoria a lo largo del ancho de la ventana
       const randomLeft = Math.random() * 100;
       heart.style.left = randomLeft + "vw";
 
-      // Duración aleatoria de la caída (entre 3 y 7 segundos)
       const duration = Math.random() * 4 + 3;
       heart.style.animationDuration = duration + "s";
 
-      // Al hacer clic en el corazón, explotamos en varios corazones pequeños
       heart.addEventListener("click", (event) => {
         explodeHeart(event.clientX, event.clientY);
-        heart.remove(); // Quitamos el corazón grande al explotar
+        heart.remove();
       });
 
-      // Agregamos el corazón grande al body
       document.body.appendChild(heart);
 
-      // Quitamos el corazón cuando termine la animación de caída
       setTimeout(() => {
         heart.remove();
       }, duration * 1000);
     }
 
-    // Función para crear una explosión de corazones pequeños
     function explodeHeart(x, y) {
-      // Cantidad de corazones pequeños que aparecerán
       const numberOfTinyHearts = 8;
-
       for (let i = 0; i < numberOfTinyHearts; i++) {
         const tinyHeart = document.createElement("div");
         tinyHeart.classList.add("tiny-heart");
         tinyHeart.innerHTML = "&#10084;";
-
-        // Posición inicial (alrededor del punto donde se hizo clic)
         tinyHeart.style.left = x + "px";
         tinyHeart.style.top = y + "px";
 
-        // Calculamos un ángulo y una distancia aleatorios para "dispersar" los corazones
-        const angle = Math.random() * 2 * Math.PI; // entre 0 y 2PI
-        const distance = 80 + Math.random() * 40;  // entre 80px y 120px de distancia
-
-        // Descomponemos en coordenadas x, y
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 80 + Math.random() * 40;
         const dx = Math.cos(angle) * distance;
         const dy = Math.sin(angle) * distance;
 
-        // Usamos variables CSS para moverlos en la animación
         tinyHeart.style.setProperty("--dx", dx + "px");
         tinyHeart.style.setProperty("--dy", dy + "px");
 
         document.body.appendChild(tinyHeart);
 
-        // Cuando acabe la animación, quitamos el corazón pequeño
         tinyHeart.addEventListener("animationend", () => {
           tinyHeart.remove();
         });
       }
     }
 
-    // Intervalo que crea corazones grandes cada 700 ms (ajusta a tu gusto)
     setInterval(createFallingHeart, 700);
   </script>
+
+  <div class="dancing-pug-container">
+    <img src="DancingPug.gif" alt="Pug bailando">
+  </div>
+
+  <div class="dancing-pug-container-2">
+    <img src="DancingPug.gif" alt="Pug bailando">
+  </div>
+
 </body>
 </html>
-
