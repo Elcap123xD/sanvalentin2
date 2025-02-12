@@ -23,16 +23,20 @@
       font-size: 1.1rem;
     }
 
+    /* USAMOS GRID */
     .card-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 1rem 0;
+      display: grid;
+      /* Cada columna tendrá mínimo 150px y, si cabe más, se expandirá */
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 1rem;
+      justify-items: center; /* Centra las cartas en cada "columna" */
+      margin: 1rem;
     }
+
     .card {
+      /* Quita la altura fija y usa aspect-ratio para que sea cuadrado */
       width: 200px;
-      height: 200px;
+      aspect-ratio: 1/1;
       perspective: 1000px;
       cursor: pointer;
     }
@@ -66,7 +70,7 @@
       background: url("Corazon.jpg") no-repeat center/cover;
       color: rgba(144, 64, 255, 0.8); /* Texto semitransparente */
     }
-    /* Parte trasera: transform común para todas */
+    /* Parte trasera */
     .card-back {
       transform: rotateY(180deg);
       position: relative;
@@ -77,7 +81,7 @@
     .card-back-3 { background: url("Carta3.jpg") no-repeat center/cover; }
     .card-back-4 { background: url("Carta4.jpg") no-repeat center/cover; }
 
-    /* Texto de la parte trasera que aparece suavemente */
+    /* Texto de la parte trasera */
     .card-back-text {
       position: absolute;
       top: 10px;
@@ -93,14 +97,11 @@
       color: #d45a6d;
       font-weight: bold;
     }
-
-    /* Al dar la vuelta a la carta, aparece el texto */
     .card-inner.is-flipped .card-back-text {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* Ajustamos el botón para que quede más abajo */
     .final-button {
       background-color: #d45a6d;
       color: #fff;
@@ -109,31 +110,27 @@
       font-size: 1rem;
       border-radius: 5px;
       cursor: pointer;
-      margin-top: 2rem; /* Separa el botón de las cartas */
+      margin-top: 2rem; 
       margin-bottom: 3rem;
     }
     .final-button:hover {
       background-color: #c3495d;
     }
 
-    /* Corazones grandes que caen */
     .heart {
-      position: fixed; /* Para "flotar" sobre la pantalla */
-      top: -10%;       /* Inician un poco arriba del viewport */
-      font-size: 2rem; /* Tamaño del corazón */
-      color: #ff6b81;  /* Color del corazón (puedes cambiarlo) */
+      position: fixed;
+      top: -10%;
+      font-size: 2rem;
+      color: #ff6b81;
       user-select: none;
-      cursor: pointer; /* Para poder hacer clic en ellos */
+      cursor: pointer;
       animation: fall linear forwards;
     }
-    /* Animación de caída de corazones */
     @keyframes fall {
       to {
-        transform: translateY(110vh); /* Baja más allá del viewport */
+        transform: translateY(110vh);
       }
     }
-
-    /* Corazones pequeños que aparecen al explotar */
     .tiny-heart {
       position: fixed;
       transform: translate(-50%, -50%);
@@ -142,7 +139,6 @@
       opacity: 1;
       animation: pop 1s ease-out forwards;
     }
-    /* Animación de explosión de los corazones pequeños */
     @keyframes pop {
       0% {
         opacity: 1;
@@ -150,34 +146,31 @@
       }
       100% {
         opacity: 0;
-        /* Usamos variables CSS (--dx, --dy) para moverlos a una posición aleatoria */
         transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2) rotate(720deg);
       }
     }
 
+    /* RESPONSIVO */
     @media (max-width: 480px) {
-      .card {
-        width: 150px;
-        height: 150px;
-      }
       h1 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
       }
       p {
         font-size: 1rem;
       }
+      .card {
+        width: 150px; /* O incluso 40vw (si quieres que sea porcentual) */
+      }
     }
 
-    /* ===================
-       Pugs bailando
-       =================== */
+    /* PUGS BAILANDO */
     .dancing-pug-container {
       position: fixed;
       bottom: 10px;
-      left: 45%; /* Ajusta para ubicarlo al gusto */
+      left: 45%;
       transform: translateX(-50%);
-      width: 120px;      /* Ajusta el tamaño a tu gusto */
-      z-index: 9999;     /* Para que quede por encima de otros elementos */
+      width: 120px;
+      z-index: 9999;
       animation: bounce 2s infinite;
     }
     .dancing-pug-container img {
@@ -188,7 +181,7 @@
     .dancing-pug-container-2 {
       position: fixed;
       bottom: 10px;
-      left: 55%; /* Ajusta para ubicar el segundo pug */
+      left: 55%;
       transform: translateX(-50%);
       width: 120px;
       z-index: 9999;
@@ -277,31 +270,25 @@
       const audio = document.getElementById("bgMusic");
       if (audio) {
         audio.play().catch(() => {
-          // Si falla (bloqueado por el navegador), esperamos el primer clic del usuario:
           document.body.addEventListener("click", playOnce);
         });
       }
     });
 
-    // Al primer clic del usuario, intentamos reproducir el audio
     function playOnce() {
       const audio = document.getElementById("bgMusic");
       if (audio) {
         audio.play().catch(() => {});
       }
-      // Quitamos este listener para que no se repita
       document.body.removeEventListener("click", playOnce);
     }
 
-    // Función para voltear la carta
     function flipCard(cardElement) {
       const cardInner = cardElement.querySelector(".card-inner");
       cardInner.classList.toggle("is-flipped");
     }
 
-    // Función que se ejecuta al hacer click en el botón final
     function finalPrompt() {
-      // Array con distintos mensajes para cuando presione "No"
       const messages = [
         "¿Estás segura de que no quieres ser mi San Valentín?",
         "¿De veritas no quieres? Yo te amo mucho ❤️",
@@ -309,96 +296,71 @@
         "Mi amor, no seas así, acepta porfi 🥺",
         "No me rendiré hasta que digas sí 😘"
       ];
-
-      let index = 0; // Para recorrer los mensajes
-
-      // Primero, pregunta principal:
+      let index = 0; 
       let respuesta = confirm("¿Quieres ser mi San Valentín?");
       
-      // Mientras la respuesta sea NO, sigue insistiendo
       while (!respuesta) {
         respuesta = confirm(messages[index % messages.length]);
         index++;
       }
-
-      // Si salió del bucle, es porque finalmente dijo "Sí"
       alert("¡Gracias, mi amor! Te amo mucho ❤️");
     }
 
-    // Generador de corazones grandes que caen
     function createFallingHeart() {
       const heart = document.createElement("div");
       heart.classList.add("heart");
-      heart.innerHTML = "&#10084;"; // Corazón grande
+      heart.innerHTML = "&#10084;"; 
 
-      // Posición X aleatoria a lo largo del ancho de la ventana
       const randomLeft = Math.random() * 100;
       heart.style.left = randomLeft + "vw";
 
-      // Duración aleatoria de la caída (entre 3 y 7 segundos)
       const duration = Math.random() * 4 + 3;
       heart.style.animationDuration = duration + "s";
 
-      // Al hacer clic en el corazón, explotamos en varios corazones pequeños
       heart.addEventListener("click", (event) => {
         explodeHeart(event.clientX, event.clientY);
-        heart.remove(); // Quitamos el corazón grande al explotar
+        heart.remove();
       });
 
-      // Agregamos el corazón grande al body
       document.body.appendChild(heart);
 
-      // Quitamos el corazón cuando termine la animación de caída
       setTimeout(() => {
         heart.remove();
       }, duration * 1000);
     }
 
-    // Función para crear una explosión de corazones pequeños
     function explodeHeart(x, y) {
-      // Cantidad de corazones pequeños que aparecerán
       const numberOfTinyHearts = 8;
-
       for (let i = 0; i < numberOfTinyHearts; i++) {
         const tinyHeart = document.createElement("div");
         tinyHeart.classList.add("tiny-heart");
         tinyHeart.innerHTML = "&#10084;";
-
-        // Posición inicial (alrededor del punto donde se hizo clic)
         tinyHeart.style.left = x + "px";
         tinyHeart.style.top = y + "px";
 
-        // Calculamos un ángulo y una distancia aleatorios para "dispersar" los corazones
-        const angle = Math.random() * 2 * Math.PI; // entre 0 y 2PI
-        const distance = 80 + Math.random() * 40;  // entre 80px y 120px de distancia
-
-        // Descomponemos en coordenadas x, y
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 80 + Math.random() * 40;
         const dx = Math.cos(angle) * distance;
         const dy = Math.sin(angle) * distance;
 
-        // Usamos variables CSS para moverlos en la animación
         tinyHeart.style.setProperty("--dx", dx + "px");
         tinyHeart.style.setProperty("--dy", dy + "px");
 
         document.body.appendChild(tinyHeart);
 
-        // Cuando acabe la animación, quitamos el corazón pequeño
         tinyHeart.addEventListener("animationend", () => {
           tinyHeart.remove();
         });
       }
     }
 
-    // Intervalo que crea corazones grandes cada 700 ms (ajusta a tu gusto)
     setInterval(createFallingHeart, 700);
   </script>
 
-  <!-- Contenedor del primer pug bailando -->
   <div class="dancing-pug-container">
     <img src="DancingPug.gif" alt="Pug bailando">
   </div>
 
-  <!-- Contenedor del segundo pug bailando -->
   <div class="dancing-pug-container-2">
     <img src="DancingPug.gif" alt="Pug bailando">
   </div>
